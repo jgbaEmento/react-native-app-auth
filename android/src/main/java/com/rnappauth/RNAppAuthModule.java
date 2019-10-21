@@ -161,15 +161,13 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
         this.clientSecret = clientSecret;
         this.clientAuthMethod = clientAuthMethod;
 
-        final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get();
-
         Boolean shouldReload = false;
-        if(serviceConfig != null && ((AuthorizationServiceConfiguration) serviceConfig).authorizationEndpoint.toString() != issuer){
+        if(mServiceConfiguration.get() != null && !mServiceConfiguration.get().authorizationEndpoint.toString().contains(issuer)){
             shouldReload = true;
         }
 
         // when serviceConfiguration is provided, we don't need to hit up the OpenID well-known id endpoint
-        if (!shouldReload && ( serviceConfiguration != null || serviceConfig != null )) {
+        if (!shouldReload && (serviceConfiguration != null || mServiceConfiguration.get() != null)) {
             try {
                 createAuthorizationServiceConfiguration(serviceConfiguration);
                 authorizeWithConfiguration(
@@ -247,15 +245,13 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
         this.dangerouslyAllowInsecureHttpRequests = dangerouslyAllowInsecureHttpRequests;
         this.additionalParametersMap = additionalParametersMap;
 
-        final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get();
-
         Boolean shouldReload = false;
-        if(serviceConfig != null && ((AuthorizationServiceConfiguration) serviceConfig).authorizationEndpoint.toString() != issuer){
+        if(mServiceConfiguration.get() != null && !mServiceConfiguration.get().authorizationEndpoint.toString().contains(issuer)){
             shouldReload = true;
         }
 
         // when serviceConfiguration is provided, we don't need to hit up the OpenID well-known id endpoint
-        if (!shouldReload && ( serviceConfiguration != null || serviceConfig != null )) {
+        if (!shouldReload && (serviceConfiguration != null || mServiceConfiguration.get() != null)) {
             try {
                 createAuthorizationServiceConfiguration(serviceConfiguration);
                 refreshWithConfiguration(
