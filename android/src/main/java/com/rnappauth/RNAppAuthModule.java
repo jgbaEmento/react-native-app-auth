@@ -161,10 +161,17 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
         this.clientSecret = clientSecret;
         this.clientAuthMethod = clientAuthMethod;
 
+        final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get();
+
+        Boolean shouldReload = false;
+        if(serviceConfig != null && ((AuthorizationServiceConfiguration) serviceConfig).authorizationEndpoint.toString() != issuer){
+            shouldReload = true;
+        }
+
         // when serviceConfiguration is provided, we don't need to hit up the OpenID well-known id endpoint
-        if (serviceConfiguration != null || mServiceConfiguration.get() != null) {
+        if (!shouldReload && ( serviceConfiguration != null || serviceConfig != null )) {
             try {
-                final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get() != null ? mServiceConfiguration.get() : createAuthorizationServiceConfiguration(serviceConfiguration);
+                createAuthorizationServiceConfiguration(serviceConfiguration);
                 authorizeWithConfiguration(
                         serviceConfig,
                         appAuthConfiguration,
