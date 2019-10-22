@@ -169,7 +169,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
         // when serviceConfiguration is provided, we don't need to hit up the OpenID well-known id endpoint
         if (!shouldReload && (serviceConfiguration != null || mServiceConfiguration.get() != null)) {
             try {
-                createAuthorizationServiceConfiguration(serviceConfiguration);
+                final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get() != null ? mServiceConfiguration.get() : createAuthorizationServiceConfiguration(serviceConfiguration);
                 authorizeWithConfiguration(
                         serviceConfig,
                         appAuthConfiguration,
@@ -253,7 +253,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
         // when serviceConfiguration is provided, we don't need to hit up the OpenID well-known id endpoint
         if (!shouldReload && (serviceConfiguration != null || mServiceConfiguration.get() != null)) {
             try {
-                createAuthorizationServiceConfiguration(serviceConfiguration);
+                final AuthorizationServiceConfiguration serviceConfig = mServiceConfiguration.get() != null ? mServiceConfiguration.get() : createAuthorizationServiceConfiguration(serviceConfiguration);
                 refreshWithConfiguration(
                         serviceConfig,
                         appAuthConfiguration,
@@ -313,7 +313,7 @@ public class RNAppAuthModule extends ReactContextBaseJavaModule implements Activ
                 promise.reject("Failed to authenticate", "Data intent is null" );
                 return;
             }
-            
+
             final AuthorizationResponse response = AuthorizationResponse.fromIntent(data);
             AuthorizationException exception = AuthorizationException.fromIntent(data);
             if (exception != null) {
